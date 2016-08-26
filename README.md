@@ -2,10 +2,16 @@
 
 Allows customizing twig, e.g. add extensions.
 
-Dependencies:
+**Dependencies:**
 
 * [TemplateEngineFactory](http://modules.processwire.com/modules/template-engine-factory/)
 * [TemplateEngineTwig](http://modules.processwire.com/modules/template-engine-twig/)
+
+**Instructions:**
+
+After installation go to module settings and enable/disable the required extensions/functions.
+
+**Usage:**
 
 Adds the following extensions/functions:
 

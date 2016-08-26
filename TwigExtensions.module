@@ -59,7 +59,7 @@ class TwigExtensions extends WireData implements Module {
    *
    * @param HookEvent $event
    */
-  private function addExtensions(HookEvent $event) {
+  public function addExtensions(HookEvent $event) {
     $this->twig = $event->arguments('twig');
 
     $this->addDebugExtension();
