@@ -59,9 +59,45 @@ class TwigExtensions extends WireData implements Module {
    *
    * @param HookEvent $event
    */
-  public function addExtensions(HookEvent $event) {
-    $twig = $event->arguments('twig');
+  private function addExtensions(HookEvent $event) {
+    $this->twig = $event->arguments('twig');
 
-    if ($this->config->debug) $twig->addExtension(new \Twig_Extension_Debug());
+    $this->addDebugExtension();
+    $this->addIntlExtension();
+  }
+
+  /*
+   * Add Debug Extension
+   *
+   * The dump function dumps information about a template variable.
+   * This is mostly useful to debug a template that does not behave
+   * as expected by introspecting its variables
+   *
+   * Usage: {{ dump(page) }}
+   */
+  private function addDebugExtension() {
+    if ($this->debug === 1 && $this->config->debug) {
+      $this->twig->addExtension(new \Twig_Extension_Debug());
+    }
+  }
+
+  /*
+   * Add Intl Extension
+   *
+   * The Intl Extension provides the localizeddate, localizednumber and localizedcurrency filters.
+   * First of all, you will need the PHP intl extension, as the Twig extension is built on top of that.
+   * The Twig Intl extension will throw an Exception if the PHP intl extension is not enabled.
+   * Installation instructions can be found in the official PHP documentation.
+   *
+   * Usage: {{ post.published|localizeddate('medium', 'none', locale) }}
+   */
+  private function addIntlExtension() {
+    if ($this->intl === 1) {
+      if (!class_exists('Twig_Extensions_Extension_Intl')) {
+        require(wire('config')->paths->TwigExtensions . 'vendor/autoload.php');
+      }
+
+      $this->twig->addExtension(new \Twig_Extensions_Extension_Intl());
+    }
   }
 }
