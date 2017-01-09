@@ -11,6 +11,9 @@ class TwigExtensionsConfig extends ModuleConfig {
   public function getDefaults() {
     return array(
       'debug' => 1,
+      'textExt' => 1,
+      'arrayExt' => 1,
+      'dateExt' => 1,
       'intl' => 0
     );
   }
@@ -24,14 +27,14 @@ class TwigExtensionsConfig extends ModuleConfig {
   public function getInputfields() {
     // get submitted data
     $data = array();
-    foreach (array('debug', 'intl') as $ext) {
+    foreach (array('debug', 'textExt', 'arrayExt', 'dateExt', 'intl') as $ext) {
       $data[$ext] = isset($this->data[$ext]) ? $this->data[$ext] : false;
     }
 
     // get inputfields
     $inputfields = parent::getInputfields();
 
-    // debug
+    // Debug Extension checkbox
     $field = $this->modules->get('InputfieldCheckbox');
     $field->label = __('Enable the Debug Extension');
     $field->attr('name', 'debug');
@@ -40,7 +43,34 @@ class TwigExtensionsConfig extends ModuleConfig {
     $field->columnWidth = 50;
     $inputfields->add($field);
 
-    // intl
+    // Text Extension checkbox
+    $field = $this->modules->get('InputfieldCheckbox');
+    $field->label = __('Enable the Text Extension');
+    $field->attr('name', 'textExt');
+    $field->attr('value', 1);
+    $field->attr('checked', $data['textExt'] === 1 ? 'checked' : '' );
+    $field->columnWidth = 50;
+    $inputfields->add($field);
+
+    // Array Extension checkbox
+    $field = $this->modules->get('InputfieldCheckbox');
+    $field->label = __('Enable the Array Extension');
+    $field->attr('name', 'arrayExt');
+    $field->attr('value', 1);
+    $field->attr('checked', $data['arrayExt'] === 1 ? 'checked' : '' );
+    $field->columnWidth = 50;
+    $inputfields->add($field);
+
+    // Date Extension checkbox
+    $field = $this->modules->get('InputfieldCheckbox');
+    $field->label = __('Enable the Date Extension');
+    $field->attr('name', 'dateExt');
+    $field->attr('value', 1);
+    $field->attr('checked', $data['dateExt'] === 1 ? 'checked' : '' );
+    $field->columnWidth = 50;
+    $inputfields->add($field);
+
+    // Intl Extension checkbox
     $field = $this->modules->get('InputfieldCheckbox');
     $field->label = __('Enable the Intl Extension');
     $field->attr('name', 'intl');
