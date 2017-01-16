@@ -11,9 +11,9 @@ class TwigExtensionsConfig extends ModuleConfig {
   public function getDefaults() {
     return array(
       'debug' => 1,
-      'textExt' => 1,
-      'arrayExt' => 1,
-      'dateExt' => 1,
+      'textExt' => 0,
+      'arrayExt' => 0,
+      'dateExt' => 0,
       'intl' => 0
     );
   }
