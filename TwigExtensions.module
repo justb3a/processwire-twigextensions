@@ -63,6 +63,9 @@ class TwigExtensions extends WireData implements Module {
     $this->twig = $event->arguments('twig');
 
     $this->addDebugExtension();
+    $this->addTextExtension();
+    $this->addArrayExtension();
+    $this->addDateExtension();
     $this->addIntlExtension();
   }
 
@@ -78,6 +81,54 @@ class TwigExtensions extends WireData implements Module {
   private function addDebugExtension() {
     if ($this->debug === 1 && $this->config->debug) {
       $this->twig->addExtension(new \Twig_Extension_Debug());
+    }
+  }
+
+  /*
+   * Add Text Extension
+   *
+   * Adds the truncate and wordwrap filters
+   *
+   */
+  private function addTextExtension() {
+    if ($this->textExt === 1) {
+      if (!class_exists('Twig_Extensions_Extension_Text')) {
+        require(wire('config')->paths->TwigExtensions . 'vendor/autoload.php');
+      }
+
+      $this->twig->addExtension(new \Twig_Extensions_Extension_Text());
+    }
+  }
+
+  /*
+   * Add Array Extension
+   *
+   * Adds the shuffle filter
+   *
+   */
+  private function addArrayExtension() {
+    if ($this->textExt === 1) {
+      if (!class_exists('Twig_Extensions_Extension_Array')) {
+        require(wire('config')->paths->TwigExtensions . 'vendor/autoload.php');
+      }
+
+      $this->twig->addExtension(new \Twig_Extensions_Extension_Array());
+    }
+  }
+
+  /*
+   * Add Date Extension
+   *
+   * Adds the time_diff filter
+   *
+   */
+  private function addDateExtension() {
+    if ($this->textExt === 1) {
+      if (!class_exists('Twig_Extensions_Extension_Date')) {
+        require(wire('config')->paths->TwigExtensions . 'vendor/autoload.php');
+      }
+
+      $this->twig->addExtension(new \Twig_Extensions_Extension_Date());
     }
   }
 
