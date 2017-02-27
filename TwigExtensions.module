@@ -93,7 +93,7 @@ class TwigExtensions extends WireData implements Module {
   private function addTextExtension() {
     if ($this->textExt === 1) {
       if (!class_exists('Twig_Extensions_Extension_Text')) {
-        require(wire('config')->paths->TwigExtensions . 'vendor/autoload.php');
+        require(/*NoCompile*/__DIR__ . '/vendor/autoload.php');
       }
 
       $this->twig->addExtension(new \Twig_Extensions_Extension_Text());
@@ -107,9 +107,9 @@ class TwigExtensions extends WireData implements Module {
    *
    */
   private function addArrayExtension() {
-    if ($this->textExt === 1) {
+    if ($this->arrayExt === 1) {
       if (!class_exists('Twig_Extensions_Extension_Array')) {
-        require(wire('config')->paths->TwigExtensions . 'vendor/autoload.php');
+        require(/*NoCompile*/__DIR__ . '/vendor/autoload.php');
       }
 
       $this->twig->addExtension(new \Twig_Extensions_Extension_Array());
@@ -123,9 +123,9 @@ class TwigExtensions extends WireData implements Module {
    *
    */
   private function addDateExtension() {
-    if ($this->textExt === 1) {
+    if ($this->dateExt === 1) {
       if (!class_exists('Twig_Extensions_Extension_Date')) {
-        require(wire('config')->paths->TwigExtensions . 'vendor/autoload.php');
+        require(/*NoCompile*/__DIR__ . '/vendor/autoload.php');
       }
 
       $this->twig->addExtension(new \Twig_Extensions_Extension_Date());
@@ -145,7 +145,7 @@ class TwigExtensions extends WireData implements Module {
   private function addIntlExtension() {
     if ($this->intl === 1) {
       if (!class_exists('Twig_Extensions_Extension_Intl')) {
-        require(wire('config')->paths->TwigExtensions . 'vendor/autoload.php');
+        require(/*NoCompile*/__DIR__ . '/vendor/autoload.php');
       }
 
       $this->twig->addExtension(new \Twig_Extensions_Extension_Intl());
