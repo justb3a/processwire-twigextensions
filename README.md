@@ -11,18 +11,36 @@ Allows customizing twig, e.g. add extensions.
 
 After installation go to module settings and enable/disable the required extensions/functions.
 
+**Includes:**
+Twig Extensions Repository https://github.com/twigphp/Twig-extensions
+
 **Usage:**
 
 Adds the following extensions/functions:
 
-* [Debug](http://twig.sensiolabs.org/doc/functions/dump.html) // only if debug mode is turned on
+* [Debug](twig.sensiolabs.org/doc/functions/dump.html) // only if debug mode is turned on
 
     ```twig
     {{ dump(page) }}
     ```
 
-* [Intl](http://twig.sensiolabs.org/doc/extensions/intl.html)
+* [Intl](http://twig-extensions.readthedocs.io/en/latest/intl.html)
 
     ```twig
     {{ post.published|localizeddate('medium', 'none', locale) }}
+    ```
+* [Text](http://twig-extensions.readthedocs.io/en/latest/text.html)
+
+    ```twig
+    {{ "Hello World!"|truncate(5) }}
+    ```
+* [Array](http://twig-extensions.readthedocs.io/en/latest/array.html)
+
+    ```twig
+    {{ post.published|shuffle }}
+    ```
+* [Date](http://twig-extensions.readthedocs.io/en/latest/date.html)
+
+    ```twig
+    {{ post.published|date("M jS, Y") }}
     ```
