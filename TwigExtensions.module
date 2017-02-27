@@ -119,7 +119,7 @@ class TwigExtensions extends WireData implements Module {
   /*
    * Add Date Extension
    *
-   * Adds the time_diff filter
+   * Adds the date and time_diff filter
    *
    */
   private function addDateExtension() {
