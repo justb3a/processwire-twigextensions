@@ -7,7 +7,7 @@
 * See README.md for usage instructions.
 *
 * @author Tabea David <td@kf-interactive.com>
-* @version 1.0.0
+* @version 1.0.1
 * @copyright Copyright (c) 2016
 * @see https://github.com/justonestep/processwire-twigextensions
 * @see http://www.processwire.com
@@ -29,7 +29,7 @@ class TwigExtensions extends WireData implements Module {
     return array(
       'title' => 'Twig Extensions',
       'summary' => 'Allows customizing twig, e.g. add extensions',
-      'version' => 100,
+      'version' => 101,
       'href' => 'https://github.com/justonestep/processwire-twigextensions',
       'singular' => true,
       'autoload' => true,
@@ -50,7 +50,7 @@ class TwigExtensions extends WireData implements Module {
   public function init() {
     // add hook, add twig debug mode
     if ($this->modules->get('TemplateEngineTwig')) {
-      $this->addHookAfter('TemplateEngineTwig::initTwig', $this, 'addExtensions');
+      $this->addHookBefore('TemplateEngineTwig::initTwig', $this, 'addExtensions');
     }
   }
 
@@ -61,12 +61,19 @@ class TwigExtensions extends WireData implements Module {
    */
   public function addExtensions(HookEvent $event) {
     $this->twig = $event->arguments('twig');
+    $enabledExtensions = array();
+    foreach ($this->data as $key => $val) {
+      if ($val && substr($key, -3) === 'Ext') $enabledExtensions[] = $key;
+    }
 
-    $this->addDebugExtension();
-    $this->addTextExtension();
-    $this->addArrayExtension();
-    $this->addDateExtension();
-    $this->addIntlExtension();
+    if ($enabledExtensions) {
+      require(/*NoCompile*/__DIR__ . '/vendor/autoload.php');
+
+      foreach ($enabledExtensions as $ext) {
+        $addExtension = 'add' . ucfirst($ext);
+        $this->$addExtension(); // addDebugExt() for example
+      }
+    }
   }
 
   /*
@@ -78,58 +85,35 @@ class TwigExtensions extends WireData implements Module {
    *
    * Usage: {{ dump(page) }}
    */
-  private function addDebugExtension() {
-    if ($this->debug === 1 && $this->config->debug) {
-      $this->twig->addExtension(new \Twig_Extension_Debug());
-    }
+  private function addDebugExt() {
+    // always add this extension if it's enabled
+    // if `config->debug` is set to false, it's just omitted
+    // otherwise it would throw an exception
+    $this->twig->addExtension(new \Twig_Extension_Debug());
   }
 
   /*
    * Add Text Extension
-   *
    * Adds the truncate and wordwrap filters
-   *
    */
-  private function addTextExtension() {
-    if ($this->textExt === 1) {
-      if (!class_exists('Twig_Extensions_Extension_Text')) {
-        require(wire('config')->paths->TwigExtensions . 'vendor/autoload.php');
-      }
-
-      $this->twig->addExtension(new \Twig_Extensions_Extension_Text());
-    }
+  private function addTextExt() {
+    $this->twig->addExtension(new \Twig_Extensions_Extension_Text());
   }
 
   /*
    * Add Array Extension
-   *
    * Adds the shuffle filter
-   *
    */
-  private function addArrayExtension() {
-    if ($this->textExt === 1) {
-      if (!class_exists('Twig_Extensions_Extension_Array')) {
-        require(wire('config')->paths->TwigExtensions . 'vendor/autoload.php');
-      }
-
-      $this->twig->addExtension(new \Twig_Extensions_Extension_Array());
-    }
+  private function addArrayExt() {
+    $this->twig->addExtension(new \Twig_Extensions_Extension_Array());
   }
 
   /*
    * Add Date Extension
-   *
    * Adds the time_diff filter
-   *
    */
-  private function addDateExtension() {
-    if ($this->textExt === 1) {
-      if (!class_exists('Twig_Extensions_Extension_Date')) {
-        require(wire('config')->paths->TwigExtensions . 'vendor/autoload.php');
-      }
-
-      $this->twig->addExtension(new \Twig_Extensions_Extension_Date());
-    }
+  private function addDateExt() {
+    $this->twig->addExtension(new \Twig_Extensions_Extension_Date());
   }
 
   /*
@@ -142,13 +126,7 @@ class TwigExtensions extends WireData implements Module {
    *
    * Usage: {{ post.published|localizeddate('medium', 'none', locale) }}
    */
-  private function addIntlExtension() {
-    if ($this->intl === 1) {
-      if (!class_exists('Twig_Extensions_Extension_Intl')) {
-        require(wire('config')->paths->TwigExtensions . 'vendor/autoload.php');
-      }
-
-      $this->twig->addExtension(new \Twig_Extensions_Extension_Intl());
-    }
+  private function addIntlExt() {
+    $this->twig->addExtension(new \Twig_Extensions_Extension_Intl());
   }
 }
