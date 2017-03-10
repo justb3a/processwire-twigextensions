@@ -10,11 +10,11 @@ class TwigExtensionsConfig extends ModuleConfig {
    */
   public function getDefaults() {
     return array(
-      'debug' => 1,
+      'debugExt' => 1,
       'textExt' => 0,
       'arrayExt' => 0,
       'dateExt' => 0,
-      'intl' => 0
+      'intlExt' => 0
     );
   }
 
@@ -25,22 +25,15 @@ class TwigExtensionsConfig extends ModuleConfig {
    * @return InputfieldWrapper
    */
   public function getInputfields() {
-    // get submitted data
-    $data = array();
-    foreach (array('debug', 'textExt', 'arrayExt', 'dateExt', 'intl') as $ext) {
-      $data[$ext] = isset($this->data[$ext]) ? $this->data[$ext] : false;
-    }
-
     // get inputfields
     $inputfields = parent::getInputfields();
 
     // Debug Extension checkbox
     $field = $this->modules->get('InputfieldCheckbox');
     $field->label = __('Enable the Debug Extension');
-    $field->attr('name', 'debug');
+    $field->attr('name', 'debugExt');
     $field->attr('value', 1);
-    $field->attr('checked', $data['debug'] === 1 ? 'checked' : '' );
-    $field->columnWidth = 50;
+    $field->columnWidth = 33;
     $inputfields->add($field);
 
     // Text Extension checkbox
@@ -48,8 +41,7 @@ class TwigExtensionsConfig extends ModuleConfig {
     $field->label = __('Enable the Text Extension');
     $field->attr('name', 'textExt');
     $field->attr('value', 1);
-    $field->attr('checked', $data['textExt'] === 1 ? 'checked' : '' );
-    $field->columnWidth = 50;
+    $field->columnWidth = 33;
     $inputfields->add($field);
 
     // Array Extension checkbox
@@ -57,8 +49,7 @@ class TwigExtensionsConfig extends ModuleConfig {
     $field->label = __('Enable the Array Extension');
     $field->attr('name', 'arrayExt');
     $field->attr('value', 1);
-    $field->attr('checked', $data['arrayExt'] === 1 ? 'checked' : '' );
-    $field->columnWidth = 50;
+    $field->columnWidth = 34;
     $inputfields->add($field);
 
     // Date Extension checkbox
@@ -66,17 +57,15 @@ class TwigExtensionsConfig extends ModuleConfig {
     $field->label = __('Enable the Date Extension');
     $field->attr('name', 'dateExt');
     $field->attr('value', 1);
-    $field->attr('checked', $data['dateExt'] === 1 ? 'checked' : '' );
-    $field->columnWidth = 50;
+    $field->columnWidth = 33;
     $inputfields->add($field);
 
     // Intl Extension checkbox
     $field = $this->modules->get('InputfieldCheckbox');
     $field->label = __('Enable the Intl Extension');
-    $field->attr('name', 'intl');
+    $field->attr('name', 'intlExt');
     $field->attr('value', 1);
-    $field->attr('checked', $data['intl'] === 1 ? 'checked' : '' );
-    $field->columnWidth = 50;
+    $field->columnWidth = 33;
     $inputfields->add($field);
 
     return $inputfields;
