@@ -7,7 +7,7 @@
 * See README.md for usage instructions.
 *
 * @author Tabea David <td@kf-interactive.com>
-* @version 1.0.1
+* @version 1.0.2
 * @copyright Copyright (c) 2016
 * @see https://github.com/justonestep/processwire-twigextensions
 * @see http://www.processwire.com
@@ -29,7 +29,7 @@ class TwigExtensions extends WireData implements Module {
     return array(
       'title' => 'Twig Extensions',
       'summary' => 'Allows customizing twig, e.g. add extensions',
-      'version' => 101,
+      'version' => 102,
       'href' => 'https://github.com/justonestep/processwire-twigextensions',
       'singular' => true,
       'autoload' => true,
@@ -61,9 +61,12 @@ class TwigExtensions extends WireData implements Module {
    */
   public function addExtensions(HookEvent $event) {
     $this->twig = $event->arguments('twig');
+
     $enabledExtensions = array();
+    $enabledHelpers = array();
     foreach ($this->data as $key => $val) {
       if ($val && substr($key, -3) === 'Ext') $enabledExtensions[] = $key;
+      if ($val && substr($key, -6) === 'Helper') $enabledHelpers[] = $key;
     }
 
     if ($enabledExtensions) {
@@ -72,6 +75,13 @@ class TwigExtensions extends WireData implements Module {
       foreach ($enabledExtensions as $ext) {
         $addExtension = 'add' . ucfirst($ext);
         $this->$addExtension(); // addDebugExt() for example
+      }
+    }
+
+    if ($enabledHelpers) {
+      foreach ($enabledHelpers as $helper) {
+        $addHelper = 'add' . ucfirst($helper);
+        $this->$addHelper(); // addFileExistsHelper() for example
       }
     }
   }
@@ -128,5 +138,21 @@ class TwigExtensions extends WireData implements Module {
    */
   private function addIntlExt() {
     $this->twig->addExtension(new \Twig_Extensions_Extension_Intl());
+  }
+
+  /*
+   * Add FileExists Helper
+   *
+   * Checks whether a file or directory exists
+   *
+   * Usage: {% if file_exists(config.paths.assets ~ 'img/filename.png') %}
+   */
+  private function addFileExistsHelper() {
+    $function = new \Twig_SimpleFunction("file_exists", function ($filename) {
+      return !empty($filename) && file_exists($filename) ? true : false;
+    });
+
+    // add function to twig environment
+    $this->twig->addFunction($function);
   }
 }
