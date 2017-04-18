@@ -19,6 +19,8 @@ After installation go to module settings and enable/disable the required extensi
 
 Adds the following extensions/functions:
 
+## Extensions
+
 * [Debug][dump] // only if debug mode is turned on
 
     ```twig
@@ -72,6 +74,18 @@ Adds the following extensions/functions:
 
     {{ start|time_diff(end) }}
     4 days ago
+    ```
+
+## Helpers
+
+* **fileExists:** Checks whether a file or directory exists.
+
+    ```twig
+    {% if file_exists(config.paths.assets ~ 'img/filename.png') %}
+      The file exists.
+    {% else %}
+      The file does not exist.
+    {% endif %}
     ```
 
 [tef]:      http://modules.processwire.com/modules/template-engine-factory/ 'TemplateEngineFactory'

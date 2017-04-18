@@ -14,7 +14,8 @@ class TwigExtensionsConfig extends ModuleConfig {
       'textExt' => 0,
       'arrayExt' => 0,
       'dateExt' => 0,
-      'intlExt' => 0
+      'intlExt' => 0,
+      'fileExistsHelper' => 0
     );
   }
 
@@ -28,13 +29,18 @@ class TwigExtensionsConfig extends ModuleConfig {
     // get inputfields
     $inputfields = parent::getInputfields();
 
+    // EXTENSIONS
+    // ----------
+    $fieldset = $this->modules->get('InputfieldFieldset');
+    $fieldset->label = __('EXTENSIONS');
+
     // Debug Extension checkbox
     $field = $this->modules->get('InputfieldCheckbox');
     $field->label = __('Enable the Debug Extension');
     $field->attr('name', 'debugExt');
     $field->attr('value', 1);
     $field->columnWidth = 33;
-    $inputfields->add($field);
+    $fieldset->add($field);
 
     // Text Extension checkbox
     $field = $this->modules->get('InputfieldCheckbox');
@@ -42,7 +48,7 @@ class TwigExtensionsConfig extends ModuleConfig {
     $field->attr('name', 'textExt');
     $field->attr('value', 1);
     $field->columnWidth = 33;
-    $inputfields->add($field);
+    $fieldset->add($field);
 
     // Array Extension checkbox
     $field = $this->modules->get('InputfieldCheckbox');
@@ -50,7 +56,7 @@ class TwigExtensionsConfig extends ModuleConfig {
     $field->attr('name', 'arrayExt');
     $field->attr('value', 1);
     $field->columnWidth = 34;
-    $inputfields->add($field);
+    $fieldset->add($field);
 
     // Date Extension checkbox
     $field = $this->modules->get('InputfieldCheckbox');
@@ -58,7 +64,7 @@ class TwigExtensionsConfig extends ModuleConfig {
     $field->attr('name', 'dateExt');
     $field->attr('value', 1);
     $field->columnWidth = 33;
-    $inputfields->add($field);
+    $fieldset->add($field);
 
     // Intl Extension checkbox
     $field = $this->modules->get('InputfieldCheckbox');
@@ -66,7 +72,24 @@ class TwigExtensionsConfig extends ModuleConfig {
     $field->attr('name', 'intlExt');
     $field->attr('value', 1);
     $field->columnWidth = 33;
-    $inputfields->add($field);
+    $fieldset->add($field);
+
+    $inputfields->add($fieldset);
+
+    // HELPERS
+    // ----------
+    $fieldset = $this->modules->get('InputfieldFieldset');
+    $fieldset->label = __('HELPERS');
+
+    // FileExists Helper
+    $field = $this->modules->get('InputfieldCheckbox');
+    $field->label = __('Add Helper `FileExists`');
+    $field->attr('name', 'fileExistsHelper');
+    $field->attr('value', 1);
+    $field->columnWidth = 33;
+    $fieldset->add($field);
+
+    $inputfields->add($fieldset);
 
     return $inputfields;
   }
