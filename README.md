@@ -17,7 +17,7 @@ After installation go to module settings and enable/disable the required extensi
 
 **Usage:**
 
-Adds the following extensions/functions:
+Adds the following extensions/helpers:
 
 ## Extensions
 
