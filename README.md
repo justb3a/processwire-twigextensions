@@ -88,6 +88,15 @@ Adds the following extensions/helpers:
     {% endif %}
     ```
 
+* **widont:** Prevent widow in string
+
+    ```twig
+   * Usage: {{ title|widont }}
+   * Input: "Add Widont Helper"
+   * Output: "Add Widont&nbsp;Helper"
+    ```
+
+
 [tef]:      http://modules.processwire.com/modules/template-engine-factory/ 'TemplateEngineFactory'
 [tet]:      http://modules.processwire.com/modules/template-engine-twig/    'TemplateEngineTwig' 
 [twigrepo]: https://github.com/twigphp/Twig-extensions                      'Twig Extension Repository'

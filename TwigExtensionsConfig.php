@@ -91,6 +91,16 @@ class TwigExtensionsConfig extends ModuleConfig {
 
     $inputfields->add($fieldset);
 
+    // Widont Helper
+    $field = $this->modules->get('InputfieldCheckbox');
+    $field->label = __('Add Helper `Widont`');
+    $field->attr('name', 'widontHelper');
+    $field->attr('value', 1);
+    $field->columnWidth = 33;
+    $fieldset->add($field);
+
+    $inputfields->add($fieldset);
+
     return $inputfields;
   }
 
