@@ -70,7 +70,9 @@ class TwigExtensions extends WireData implements Module {
     }
 
     if ($enabledExtensions) {
-      require(/*NoCompile*/__DIR__ . '/vendor/autoload.php');
+      if (!class_exists('Twig_Extensions_Autoloader')) {
+        require(/*NoCompile*/__DIR__ . '/vendor/autoload.php');
+      }
 
       foreach ($enabledExtensions as $ext) {
         $addExtension = 'add' . ucfirst($ext);
