@@ -88,6 +88,16 @@ Adds the following extensions/helpers:
     {% endif %}
     ```
 
+* **widont:** Prevent widow in string
+    - in typesetting a widow is a very short line (one word or the end of an hyphenated word),
+      which is separated from the rest of the paragraph. It's considered as poor typography because it leaves too much white space.
+
+    ```twig
+   {{ 'Add Widont Helper'|widont }}
+   'Add Widont&nbsp;Helper'
+    ```
+
+
 [tef]:      http://modules.processwire.com/modules/template-engine-factory/ 'TemplateEngineFactory'
 [tet]:      http://modules.processwire.com/modules/template-engine-twig/    'TemplateEngineTwig' 
 [twigrepo]: https://github.com/twigphp/Twig-extensions                      'Twig Extension Repository'

@@ -15,7 +15,8 @@ class TwigExtensionsConfig extends ModuleConfig {
       'arrayExt' => 0,
       'dateExt' => 0,
       'intlExt' => 0,
-      'fileExistsHelper' => 0
+      'fileExistsHelper' => 0,
+      'widontHelper' => 0
     );
   }
 
@@ -85,6 +86,16 @@ class TwigExtensionsConfig extends ModuleConfig {
     $field = $this->modules->get('InputfieldCheckbox');
     $field->label = __('Add Helper `FileExists`');
     $field->attr('name', 'fileExistsHelper');
+    $field->attr('value', 1);
+    $field->columnWidth = 33;
+    $fieldset->add($field);
+
+    $inputfields->add($fieldset);
+
+    // Widont Helper
+    $field = $this->modules->get('InputfieldCheckbox');
+    $field->label = __('Add Helper `Widont`');
+    $field->attr('name', 'widontHelper');
     $field->attr('value', 1);
     $field->columnWidth = 33;
     $fieldset->add($field);
