@@ -7,7 +7,7 @@
 * See README.md for usage instructions.
 *
 * @author Tabea David <td@kf-interactive.com>
-* @version 1.0.2
+* @version 1.0.3
 * @copyright Copyright (c) 2016
 * @see https://github.com/justonestep/processwire-twigextensions
 * @see http://www.processwire.com
@@ -70,7 +70,7 @@ class TwigExtensions extends WireData implements Module {
     }
 
     if ($enabledExtensions) {
-      require(/*NoCompile*/__DIR__ . '/vendor/autoload.php');
+      if (!class_exists('Twig_Extensions_Autoloader')) require(/*NoCompile*/__DIR__ . '/vendor/autoload.php');
 
       foreach ($enabledExtensions as $ext) {
         $addExtension = 'add' . ucfirst($ext);
@@ -161,17 +161,15 @@ class TwigExtensions extends WireData implements Module {
    *
    * Prevent widow in string
    *
-   * Usage: {{ title|widont }}
-   * Input: "Add Widont Helper"
-   * Output: "Add Widont&nbsp;Helper"
+   * Usage: {{ 'Add Widont Helper'|widont }}
+   * Output: 'Add Widont&nbsp;Helper'
    */
-  private function addWidontHelper()
-  {
-    $function = new \Twig_SimpleFilter("widont", function ($str) {
+  private function addWidontHelper() {
+    $function = new \Twig_SimpleFilter('widont', function ($str) {
       return preg_replace('/\s+(\S+)$/', '&#160;$1', rtrim($str));
     });
 
     // add function to twig environment
-    $this->twig->addFilter($function);    
+    $this->twig->addFilter($function);
   }
 }

@@ -15,7 +15,8 @@ class TwigExtensionsConfig extends ModuleConfig {
       'arrayExt' => 0,
       'dateExt' => 0,
       'intlExt' => 0,
-      'fileExistsHelper' => 0
+      'fileExistsHelper' => 0,
+      'widontHelper' => 0
     );
   }
 

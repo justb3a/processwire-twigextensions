@@ -89,11 +89,12 @@ Adds the following extensions/helpers:
     ```
 
 * **widont:** Prevent widow in string
+    - in typesetting a widow is a very short line (one word or the end of an hyphenated word),
+      which is separated from the rest of the paragraph. It's considered as poor typography because it leaves too much white space.
 
     ```twig
-   * Usage: {{ title|widont }}
-   * Input: "Add Widont Helper"
-   * Output: "Add Widont&nbsp;Helper"
+   {{ 'Add Widont Helper'|widont }}
+   'Add Widont&nbsp;Helper'
     ```
 
 
