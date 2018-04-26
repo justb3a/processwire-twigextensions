@@ -10,7 +10,6 @@ class TwigExtensionsConfig extends ModuleConfig {
    */
   public function getDefaults() {
     return array(
-      'debugExt' => 1,
       'textExt' => 0,
       'arrayExt' => 0,
       'dateExt' => 0,
@@ -34,14 +33,6 @@ class TwigExtensionsConfig extends ModuleConfig {
     // ----------
     $fieldset = $this->modules->get('InputfieldFieldset');
     $fieldset->label = __('EXTENSIONS');
-
-    // Debug Extension checkbox
-    $field = $this->modules->get('InputfieldCheckbox');
-    $field->label = __('Enable the Debug Extension');
-    $field->attr('name', 'debugExt');
-    $field->attr('value', 1);
-    $field->columnWidth = 33;
-    $fieldset->add($field);
 
     // Text Extension checkbox
     $field = $this->modules->get('InputfieldCheckbox');

@@ -87,22 +87,6 @@ class TwigExtensions extends WireData implements Module {
   }
 
   /*
-   * Add Debug Extension
-   *
-   * The dump function dumps information about a template variable.
-   * This is mostly useful to debug a template that does not behave
-   * as expected by introspecting its variables
-   *
-   * Usage: {{ dump(page) }}
-   */
-  private function addDebugExt() {
-    // always add this extension if it's enabled
-    // if `config->debug` is set to false, it's just omitted
-    // otherwise it would throw an exception
-    $this->twig->addExtension(new \Twig_Extension_Debug());
-  }
-
-  /*
    * Add Text Extension
    * Adds the truncate and wordwrap filters
    */
