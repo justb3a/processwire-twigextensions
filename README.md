@@ -21,13 +21,6 @@ Adds the following extensions/helpers:
 
 ## Extensions
 
-* [Debug][dump] // only if debug mode is turned on
-
-    ```twig
-    {# dump - dumps information about a template variable #}
-    {{ dump('Hello World!') }}
-    string(12) "Hello World!"
-    ```
 * [Intl][intl]
 
     ```twig
@@ -101,7 +94,6 @@ Adds the following extensions/helpers:
 [tef]:      http://modules.processwire.com/modules/template-engine-factory/ 'TemplateEngineFactory'
 [tet]:      http://modules.processwire.com/modules/template-engine-twig/    'TemplateEngineTwig' 
 [twigrepo]: https://github.com/twigphp/Twig-extensions                      'Twig Extension Repository'
-[dump]:     http://twig.sensiolabs.org/doc/2.x/functions/dump.html          'Dump Extension'
 [intl]:     http://twig-extensions.readthedocs.io/en/latest/intl.html       'Intl Extension'
 [text]:     http://twig-extensions.readthedocs.io/en/latest/text.html       'Text Extension'
 [array]:    http://twig-extensions.readthedocs.io/en/latest/array.html      'Array Extension'
