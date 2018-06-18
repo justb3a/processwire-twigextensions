@@ -7,9 +7,9 @@
 * See README.md for usage instructions.
 *
 * @author Tabea David <td@kf-interactive.com>
-* @version 1.0.3
-* @copyright Copyright (c) 2016
-* @see https://github.com/justonestep/processwire-twigextensions
+* @version 1.0.4
+* @copyright Copyright (c) 2018
+* @see https://github.com/justb3a/processwire-twigextensions
 * @see http://www.processwire.com
 */
 
@@ -29,8 +29,8 @@ class TwigExtensions extends WireData implements Module {
     return array(
       'title' => 'Twig Extensions',
       'summary' => 'Allows customizing twig, e.g. add extensions',
-      'version' => 103,
-      'href' => 'https://github.com/justonestep/processwire-twigextensions',
+      'version' => 104,
+      'href' => 'https://github.com/justb3a/processwire-twigextensions',
       'singular' => true,
       'autoload' => true,
       'icon' => 'puzzle-piece',
