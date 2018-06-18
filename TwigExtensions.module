@@ -7,9 +7,9 @@
 * See README.md for usage instructions.
 *
 * @author Tabea David <td@kf-interactive.com>
-* @version 1.0.3
-* @copyright Copyright (c) 2016
-* @see https://github.com/justonestep/processwire-twigextensions
+* @version 1.0.4
+* @copyright Copyright (c) 2018
+* @see https://github.com/justb3a/processwire-twigextensions
 * @see http://www.processwire.com
 */
 
@@ -29,8 +29,8 @@ class TwigExtensions extends WireData implements Module {
     return array(
       'title' => 'Twig Extensions',
       'summary' => 'Allows customizing twig, e.g. add extensions',
-      'version' => 103,
-      'href' => 'https://github.com/justonestep/processwire-twigextensions',
+      'version' => 104,
+      'href' => 'https://github.com/justb3a/processwire-twigextensions',
       'singular' => true,
       'autoload' => true,
       'icon' => 'puzzle-piece',
@@ -64,11 +64,14 @@ class TwigExtensions extends WireData implements Module {
 
     $enabledExtensions = array();
     $enabledHelpers = array();
+    $enabledFeatures = array();
     foreach ($this->data as $key => $val) {
       if ($val && substr($key, -3) === 'Ext') $enabledExtensions[] = $key;
       if ($val && substr($key, -6) === 'Helper') $enabledHelpers[] = $key;
+      if ($val && substr($key, -7) === 'Feature') $enabledFeatures[] = $key;
     }
 
+    // add activated extensions
     if ($enabledExtensions) {
       if (!class_exists('Twig_Extensions_Autoloader')) require(/*NoCompile*/__DIR__ . '/vendor/autoload.php');
 
@@ -78,10 +81,19 @@ class TwigExtensions extends WireData implements Module {
       }
     }
 
+    // add activated helpers
     if ($enabledHelpers) {
       foreach ($enabledHelpers as $helper) {
         $addHelper = 'add' . ucfirst($helper);
         $this->$addHelper(); // addFileExistsHelper() for example
+      }
+    }
+
+    // add activated features
+    if ($enabledFeatures) {
+      foreach ($enabledFeatures as $feature) {
+        $addFeature = 'add' . ucfirst($feature);
+        $this->$addFeature(); // addKalongFeature() for example
       }
     }
   }
@@ -138,6 +150,28 @@ class TwigExtensions extends WireData implements Module {
    */
   private function addIntlExt() {
     $this->twig->addExtension(new \Twig_Extensions_Extension_Intl());
+  }
+
+  /*
+   * Add Kalong Feature
+   * kalong—a frontend styleguide development toolkit
+   * Kalong is a collection/combination of different tools, to help you get started creating your own frontend styleguide,
+   * with easy reusable components. It is based on Fractal and a collection of custom gulp-tasks to get you started fast.
+   *
+   * @see: https://github.com/webgefrickel/kalong
+   * @see: https://fractal.build/
+   */
+  private function addKalongFeature() {
+    require_once($this->config->paths->TwigExtensions. 'lib/RenderPatternTokenParser.php');
+
+    $patternPath = wire('config')->kalong['patterns'];
+    $loader = $this->twig->getLoader();
+    $loader->addPath($patternPath, 'pattern');
+    $this->twig->addFilter(new \Twig_SimpleFilter('safe', 'twig_raw_filter', array('is_safe' => array('html'))));
+    $this->twig->addFilter(new \Twig_SimpleFilter('path', function($path) {
+      return wire('config')->urls->assets . trim($path, '/');
+    }));
+    $this->twig->addTokenParser(new RenderPattern_TokenParser());
   }
 
   /*

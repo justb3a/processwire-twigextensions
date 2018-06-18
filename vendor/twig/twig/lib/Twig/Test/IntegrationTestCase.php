@@ -3,11 +3,13 @@
 /*
  * This file is part of Twig.
  *
- * (c) 2010 Fabien Potencier
+ * (c) Fabien Potencier
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Integration test helper.
@@ -15,12 +17,20 @@
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Karma Dordrak <drak@zikula.org>
  */
-abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
+abstract class Twig_Test_IntegrationTestCase extends TestCase
 {
     /**
      * @return string
      */
     abstract protected function getFixturesDir();
+
+    /**
+     * @return Twig_RuntimeLoaderInterface[]
+     */
+    protected function getRuntimeLoaders()
+    {
+        return array();
+    }
 
     /**
      * @return Twig_ExtensionInterface[]
@@ -90,13 +100,13 @@ abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
             if (preg_match('/--TEST--\s*(.*?)\s*(?:--CONDITION--\s*(.*))?\s*((?:--TEMPLATE(?:\(.*?\))?--(?:.*?))+)\s*(?:--DATA--\s*(.*))?\s*--EXCEPTION--\s*(.*)/sx', $test, $match)) {
                 $message = $match[1];
                 $condition = $match[2];
-                $templates = $this->parseTemplates($match[3]);
+                $templates = self::parseTemplates($match[3]);
                 $exception = $match[5];
                 $outputs = array(array(null, $match[4], null, ''));
             } elseif (preg_match('/--TEST--\s*(.*?)\s*(?:--CONDITION--\s*(.*))?\s*((?:--TEMPLATE(?:\(.*?\))?--(?:.*?))+)--DATA--.*?--EXPECT--.*/s', $test, $match)) {
                 $message = $match[1];
                 $condition = $match[2];
-                $templates = $this->parseTemplates($match[3]);
+                $templates = self::parseTemplates($match[3]);
                 $exception = false;
                 preg_match_all('/--DATA--(.*?)(?:--CONFIG--(.*?))?--EXPECT--(.*?)(?=\-\-DATA\-\-|$)/s', $test, $outputs, PREG_SET_ORDER);
             } else {
@@ -121,6 +131,10 @@ abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
 
     protected function doIntegrationTest($file, $message, $condition, $templates, $exception, $outputs)
     {
+        if (!$outputs) {
+            $this->markTestSkipped('no legacy tests to run');
+        }
+
         if ($condition) {
             eval('$ret = '.$condition.';');
             if (!$ret) {
@@ -137,6 +151,10 @@ abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
             ), $match[2] ? eval($match[2].';') : array());
             $twig = new Twig_Environment($loader, $config);
             $twig->addGlobal('global', 'global');
+            foreach ($this->getRuntimeLoaders() as $runtimeLoader) {
+                $twig->addRuntimeLoader($runtimeLoader);
+            }
+
             foreach ($this->getExtensions() as $extension) {
                 $twig->addExtension($extension);
             }
@@ -165,15 +183,12 @@ abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
                 $template = $twig->loadTemplate('index.twig');
             } catch (Exception $e) {
                 if (false !== $exception) {
-                    $this->assertSame(trim($exception), trim(sprintf('%s: %s', get_class($e), $e->getMessage())));
+                    $message = $e->getMessage();
+                    $this->assertSame(trim($exception), trim(sprintf('%s: %s', get_class($e), $message)));
+                    $last = substr($message, strlen($message) - 1);
+                    $this->assertTrue('.' === $last || '?' === $last, $message, 'Exception message must end with a dot or a question mark.');
 
                     return;
-                }
-
-                if ($e instanceof Twig_Error_Syntax) {
-                    $e->setTemplateFile($file);
-
-                    throw $e;
                 }
 
                 throw new Twig_Error(sprintf('%s: %s', get_class($e), $e->getMessage()), -1, $file, $e);
@@ -188,18 +203,15 @@ abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
                     return;
                 }
 
-                if ($e instanceof Twig_Error_Syntax) {
-                    $e->setTemplateFile($file);
-                } else {
-                    $e = new Twig_Error(sprintf('%s: %s', get_class($e), $e->getMessage()), -1, $file, $e);
-                }
+                $e = new Twig_Error(sprintf('%s: %s', get_class($e), $e->getMessage()), -1, $file, $e);
 
                 $output = trim(sprintf('%s: %s', get_class($e), $e->getMessage()));
             }
 
             if (false !== $exception) {
                 list($class) = explode(':', $exception);
-                $this->assertThat(null, new PHPUnit_Framework_Constraint_Exception($class));
+                $constraintClass = class_exists('PHPUnit\Framework\Constraint\Exception') ? 'PHPUnit\Framework\Constraint\Exception' : 'PHPUnit_Framework_Constraint_Exception';
+                $this->assertThat(null, new $constraintClass($class));
             }
 
             $expected = trim($match[3], "\n ");
@@ -209,8 +221,13 @@ abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
 
                 foreach (array_keys($templates) as $name) {
                     echo "Template: $name\n";
-                    $source = $loader->getSource($name);
-                    echo $twig->compile($twig->parse($twig->tokenize($source, $name)));
+                    $loader = $twig->getLoader();
+                    if (!$loader instanceof Twig_SourceContextLoaderInterface) {
+                        $source = new Twig_Source($loader->getSource($name), $name);
+                    } else {
+                        $source = $loader->getSourceContext($name);
+                    }
+                    echo $twig->compile($twig->parse($twig->tokenize($source)));
                 }
             }
             $this->assertEquals($expected, $output, $message.' (in '.$file.')');
@@ -228,3 +245,5 @@ abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
         return $templates;
     }
 }
+
+class_alias('Twig_Test_IntegrationTestCase', 'Twig\Test\IntegrationTestCase', false);

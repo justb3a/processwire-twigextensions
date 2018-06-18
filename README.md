@@ -97,6 +97,11 @@ Adds the following extensions/helpers:
    'Add Widont&nbsp;Helper'
     ```
 
+## Features
+
+* **kalongFeature:** A frontend styleguide development toolkit
+    - [Kalong](https://github.com/webgefrickel/kalong) is a collection/combination of different tools, to help you get started creating your own frontend styleguide, with easy reusable components
+    - it is based on [Fractal](https://fractal.build/) and a collection of custom gulp-tasks to get you started fast
 
 [tef]:      http://modules.processwire.com/modules/template-engine-factory/ 'TemplateEngineFactory'
 [tet]:      http://modules.processwire.com/modules/template-engine-twig/    'TemplateEngineTwig' 
