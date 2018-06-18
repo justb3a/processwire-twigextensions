@@ -16,7 +16,8 @@ class TwigExtensionsConfig extends ModuleConfig {
       'dateExt' => 0,
       'intlExt' => 0,
       'fileExistsHelper' => 0,
-      'widontHelper' => 0
+      'widontHelper' => 0,
+      'kalongFeature' => 0
     );
   }
 
@@ -98,6 +99,28 @@ class TwigExtensionsConfig extends ModuleConfig {
     $field->attr('name', 'widontHelper');
     $field->attr('value', 1);
     $field->columnWidth = 33;
+    $fieldset->add($field);
+
+    $inputfields->add($fieldset);
+
+    // FEATURES
+    // ----------
+    $fieldset = $this->modules->get('InputfieldFieldset');
+    $fieldset->label = __('FEATURES');
+    $fieldset->collapsed = Inputfield::collapsedYes;
+
+    // Kalong Feature
+    $fractalUrl = 'https://fractal.build/';
+    $kalongUrl = 'https://github.com/webgefrickel/kalong';
+    $kalongTitle = __('Kalong—a frontend styleguide development toolkit.');
+    $kalongDesc = __("[Kalong](%s) is a collection/combination of different tools, to help you get started creating your own frontend styleguide, with easy reusable components. It is based on [Fractal](%s) and a collection of custom gulp-tasks to get you started fast.");
+
+    $field = $this->modules->get('InputfieldCheckbox');
+    $field->label = __('Add Kalong Feature');
+    $field->attr('name', 'kalongFeature');
+    $field->attr('value', 1);
+    $field->description = "**$kalongTitle**" . PHP_EOL . sprintf($kalongDesc, $kalongUrl, $fractalUrl);
+    $field->columnWidth = 100;
     $fieldset->add($field);
 
     $inputfields->add($fieldset);
