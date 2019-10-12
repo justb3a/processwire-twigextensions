@@ -1,3 +1,7 @@
+# WARNING: This repository is no longer maintained :warning:
+
+> This repository will not be updated. The repository will be kept available in read-only mode.
+
 # ProcessWire Twig Extensions
 
 Allows customizing twig, e.g. add extensions.
